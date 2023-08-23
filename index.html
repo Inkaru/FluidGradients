@@ -17,19 +17,20 @@
 
         function preload(){
           theShader = loadShader('basic.vert','texDeformshader.frag');
-          img = loadImage("./gradient4.png");
+          img = loadImage("./gradient6.png");
           var GUI = lil.GUI;
           const gui = new GUI();
 
           obj = {
-            img: 'gradient4',
+            img: 'gradient6',
             displaySimplex: false, 
-            noise: true, 
-            noiseIntensity: 0.1,
-            deformIntensity: 0.01
+            noise: false, 
+            noiseIntensity: 0.07,
+            deformIntensity: 0.004
+            //deformIntensity: 0.01
           }
 
-          gui.add( obj, 'img', [ 'gradient1', 'gradient2', 'gradient3','gradient4','gradient5'] ).onChange( value => {
+          gui.add( obj, 'img', [ 'gradient1', 'gradient2', 'gradient3','gradient4','gradient5','gradient6'] ).onChange( value => {
             img = loadImage('./'+value+'.png');
             img
           })
