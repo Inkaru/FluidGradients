@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fluid gradient</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.18"></script>
+    <script>
+        // This script and associated shader deforms an image of a gradient using hlsl
+
+        let theShader;
+        let img;
+
+        const sizes = {
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+
+        function preload(){
+          theShader = loadShader('basic.vert','texDeformshader.frag');
+          img = loadImage("./gradient5.png");
+          var GUI = lil.GUI;
+          const gui = new GUI();
+
+          obj = {
+            img: 'gradient5',
+            displaySimplex: false, 
+            noise: true, 
+            noiseIntensity: 0.1,
+            deformIntensity: 0.01
+          }
+
+          gui.add( obj, 'img', [ 'gradient1', 'gradient2', 'gradient3','gradient4','gradient5'] ).onChange( value => {
+            img = loadImage('./'+value+'.png');
+            img
+          })
+          gui.add(obj, 'displaySimplex')
+          gui.add(obj, 'noise')
+          gui.add(obj, 'noiseIntensity',0,0.25)
+          gui.add(obj, 'deformIntensity',0,0.1)
+
+        }
+
+        function setup() {
+          createCanvas(windowWidth, windowHeight, WEBGL);
+          noStroke(); 
+        }
+
+        function draw() {
+          shader(theShader);
+
+          theShader.setUniform("u_resolution", [sizes.width, sizes.height]);
+          theShader.setUniform("u_time", millis() / 1000.0);
+          theShader.setUniform("u_mouse", [mouseX, map(mouseY, 0, height, height, 0)]);
+          theShader.setUniform("u_texture", img);
+          theShader.setUniform("u_displaySimplex", obj.displaySimplex);
+          theShader.setUniform("u_hasNoise", obj.noise);
+          theShader.setUniform("u_noiseIntensity", obj.noiseIntensity);
+          theShader.setUniform("u_deformIntensity", obj.deformIntensity);
+
+          rect(0,0,width, height);
+        }
+
+        // function windowResized() {
+        //   resizeCanvas(windowWidth, windowHeight, WEBGL);
+        // }
+
+        // window.addEventListener('resize', () =>
+        // {
+        //     // Update sizes
+        //     sizes.width = window.innerWidth;
+        //     sizes.height = window.innerHeight;
+        //     resizeCanvas(windowWidth, windowHeight, WEBGL);
+        // })
+
+        function windowResized() {
+          sizes.width = window.innerWidth;
+          sizes.height = window.innerHeight;
+          resizeCanvas(windowWidth, windowHeight, WEBGL);
+        }
+
+    </script>
+
+    <style>
+    body {background-color: black;}
+
+    *
+    {
+        margin: 0;
+        padding: 0;
+    }
+
+    p5canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      outline: none;
+    }
+
+    html, body
+    {
+        overflow: hidden;
+    }
+  </style>
+
+  </head>
+
+  <body>
+    <main>
+    </main>
+  </body>
+
+</html>

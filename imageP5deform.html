@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fluid gradient</title>
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+        <script>
+        let res = 4;
+        let margin = 50;
+        let img;
+
+        function preload(){
+          img = loadImage("./gradient1.png");
+        }
+
+        function setup() {
+          img.resize(400,400);
+          createCanvas(img.width - margin, img.height - margin);
+          //pixelDensity(1);
+          
+          img.loadPixels();
+          noStroke();
+        }
+
+        function draw() {
+          //image(img, 0, 0);
+          //img.loadPixels();
+          strokeWeight(1);
+
+            let t = millis() * 0.002;
+
+            for (let x = 0; x < img.width - margin; x+=res) {
+                for (let y = 0; y < img.height - margin; y+=res) {
+                    //noiseX = noise();
+                    let pix = img.get(
+                        x + margin/2 + 20*noise(x,t),
+                        y+  margin/2 + 23*noise(y,t));
+                    fill(pix);
+                    //point(x,y);
+                    rect(x,y,res,res)
+                    //console.log(pix);
+                }
+            }
+            //noLoop();
+        }
+
+    // function setup() {
+    //     createCanvas(300, 300);
+    //     pixelDensity(1);
+    //     img.resize(100, 100);
+
+  
+    //     // Loop over every pixel in the image
+    //     for (let y = 0; y < img.height; y++) {
+    //         for (let x = 0; x < img.width; x++) {
+    //         // Read the pixel's color
+    //         let originalColor = img.get(x, y);
+
+    //         // Inverse the color
+    //         const r = red(originalColor);
+    //         const g = green(originalColor);
+    //         const b = blue(originalColor);
+    //         let outputColor = color(r, g, b);
+
+    //         // Set the pixel's color
+    //         img.set(x, y, outputColor);
+    //         }
+    //     }
+    //     img.updatePixels();
+    // }
+
+    // function draw() {
+    // image(img, 0, 0, width, height);
+    // }
+
+
+    function windowResized() {
+        size = min(windowHeight,windowWidth);
+        resizeCanvas(size, size);
+    }
+
+    </script>
+    </head>
+
+    <body>
+        <main>
+        </main>
+    </body>
+
+</html>
